@@ -2,7 +2,25 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    <link href="http://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css" rel="stylesheet">
     <title>cloud-music</title>
+    <script>
+      //设置html字号
+      ;(function (doc, win, undefined) {
+        let docEle = doc.documentElement,
+            evtName = 'orienttationchange' in  win ? 'orienttationchange' : 'resize',
+            //重新计算字号
+            recal = function () {
+              let htmlWid = docEle.clientWidth;
+              //以20px为基准
+              docEle.style.fontSize = 20 * (htmlWid / 320) + 'px';
+            };
+        win.addEventListener(evtName, recal, false);
+        doc.addEventListener('DOMContentLoaded', recal, false);
+      })(document, window, undefined)
+    </script>
   </head>
   <body>
     <div id="app"></div>
