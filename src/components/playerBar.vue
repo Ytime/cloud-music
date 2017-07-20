@@ -1,11 +1,11 @@
 <template>
   <footer class="bottom-player" v-show="isShowBar">
-    <audio id="player" :src="player.src"  @canplay="canPlay" @error="loadError" @timeupdate="timeUpdate"></audio>
+    <audio id="player" :src="player.src"  @canplay="canPlay" @error="loadError" @timeupdate="timeUpdate" @ended="autoPlay"></audio>
     <div class="cover" @click="showPlayer">
       <img :src="player.coverImgUrl" alt="">
     </div>
     <div class="info">
-      <div>{{player.name}}</div>
+      <div class="name">{{player.name}}</div>
       <div class="artist">{{player.singer}}</div>
     </div>
     <div class="control">
@@ -22,7 +22,7 @@
     </div>
 
     <!--播放进度-->
-    <mu-linear-progress :size="1" class="progress" mode="determinate" :value="value"/>
+    <mu-linear-progress :size="1" class="progress" mode="determinate" :value="playTime"/>
 
     <!--播放列表-->
     <player-list></player-list>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import { mapState, mapGetters, mapMutations } from 'vuex'
+  import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
   import playerList from './playerList.vue'
 
   export default {
@@ -42,22 +42,22 @@
     data () {
       return {
         audio: null,
-        value: 0,
         bottomSheet: false,
-        value: 0
       }
     },
     mounted(){
       this.audio = document.getElementById('player');
+      this.SET_AUDIO(this.audio);
+
 //      console.log(this.audio)
     },
     computed: {
-      ...mapState(['isPlaying','player']),
-      ...mapGetters(['isShowBar'])
+      ...mapState(['isPlaying','player', 'mode']),
+      ...mapGetters(['isShowBar', 'playTime'])
     },
     methods: {
-
-      ...mapMutations(['PLAY', 'PAUSE','SHOW_PLAYER_LIST']),
+      ...mapActions(['playNext', 'setPlayerTime']),
+      ...mapMutations(['PLAY', 'PAUSE','SHOW_PLAYER_LIST','SET_AUDIO', 'SET_CURRENT_TIME', 'SET_DURATION_TIME']),
       //播放暂停切换
       togglePlay(){
         if(this.isPlaying){
@@ -70,9 +70,18 @@
       },
       //audio的canplay事件
       canPlay(){
-        console.log('can play')
         this.PLAY();
         this.audio.play();
+      },
+      //自动播放
+      autoPlay(){
+        //单曲循环模式
+        if (this.mode === 2){
+          this.setPlayerTime(0);
+        }
+        else{
+          this.playNext();
+        }
       },
       //audio加载出错回调函数
       loadError(){
@@ -82,9 +91,11 @@
       },
       //播放时间更新
       timeUpdate(){
-        let curTime = this.audio.currentTime;
-//        console.log(curTime)
-        this.value = curTime / this.audio.duration * 100;
+        let curTime = this.audio.currentTime,
+            duration = this.audio.duration;
+        this.SET_CURRENT_TIME(curTime);
+        this.SET_DURATION_TIME(duration);
+//        this.value = curTime / duration * 100;
       },
       //显示播放列表
       showList(){
@@ -100,6 +111,18 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+
+  /*单行省略*/
+  .ellipsis(@row: 1) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /*多行省略*/
+  .ellipsis(@row) when (@row > 1){
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: @row;
+  }
   .bottom-player{
     position: fixed;
     width: 100%;
@@ -123,10 +146,14 @@
       float: left;
       padding: 0.1rem 0.2rem;
       font-size: 0.6rem;
+      .name, .artist{
+        width: 8rem;
+        height: 0.9rem;
+        .ellipsis;
+      }
       .artist{
         color: rgba(0, 0, 0, 0.54);
       }
-
     }
     .control{
       float: right;

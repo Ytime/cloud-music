@@ -73,7 +73,7 @@
 <script>
 
   import api from '../api';
-  import { mapState, mapMutations, mapGetters } from 'vuex'
+  import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
   let {getPlayListDetail} = api;
   export default {
     components: {},
@@ -132,6 +132,7 @@
     },
     methods: {
       ...mapMutations(['PLAY_ALL','CHANGE_PLAY', 'SET_PLAYER','PAUSE']),
+      ...mapActions(['changeSong']),
       get(){
         this.isLoading = true;
         console.log('get: ' + this.$route.params.id)
@@ -178,19 +179,21 @@
         }
 
         if(this.songId === tracks[index].id){
-          return;
-        }else{
-          this.CHANGE_PLAY(index);
-          this.playSong(tracks[index]);
-
+          //同一首歌，跳转播放页面
+          this.$router.push({'name': 'player'})
+        }
+        else{
+          //切换歌曲
+          this.changeSong(index);
+//          this.playSong(index);
         }
       },
-      //播放音乐，现根据playlist设置封面和歌曲信息，再通过get方法请求歌曲文件
-      playSong(params){
-        params = this.getSongParams(params);
-        this.SET_PLAYER(params);
-        this.$store.dispatch('getSong', params.id)
-      }
+//      //播放音乐，先根据playlist设置封面和歌曲信息，再通过get方法请求歌曲文件
+//      playSong(index){
+//        let params = this.getSongParams(this.tracks[index]);
+//        this.SET_PLAYER(params);
+//        this.$store.dispatch('getSong', params)
+//      }
     },
     filters: {
       countFormat(count){
@@ -329,16 +332,16 @@
       margin-top: 0.6em;
     }
     //旋转图像
-    @keyframes rotating {
-      0%{
-        transform: rotate(0deg);
-      }
-      100%{
-        transform: rotate(360deg);
-      }
-    }
-    /*.track-list{*/
-      /*background-color: #fafafa;*/
+    /*@keyframes rotating {*/
+      /*0%{*/
+        /*transform: rotate(0deg);*/
+      /*}*/
+      /*100%{*/
+        /*transform: rotate(360deg);*/
+      /*}*/
     /*}*/
+    .track-list{
+      background-color: #fafafa;
+    }
   }
 </style>

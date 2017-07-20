@@ -25,6 +25,9 @@
     /*width: 100%;*/
     /*max-height: 60%;*/
   /*}*/
+  /*#app{*/
+    /*min-height: 100%;*/
+  /*}*/
   .on{
     color: @primaryColor;
     /*display: none;*/

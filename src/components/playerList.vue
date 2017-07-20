@@ -36,7 +36,7 @@
     },
     methods: {
       ...mapMutations(['CHANGE_PLAY', 'DELETE', 'SET_PLAYER']),
-      ...mapActions(['deleteSong']),
+      ...mapActions(['deleteSong', 'changeSong']),
       close () {
         this.$store.commit('CLOSE_PLAYER_LIST');
       },
@@ -45,14 +45,15 @@
         event.cancelBubble = true;
         this.deleteSong(index);
       },
+      //切换歌曲
       change(index){
         if(this.id === this.playlist[index].id){
-          return;
+          //同一首歌，跳转播放页面
+          this.$store.commit('CLOSE_PLAYER_LIST');
+          this.$router.push({'name': 'player'});
         }
         else{
-          let params = this.playlist[index];
-          this.SET_PLAYER(params);
-          this.$store.dispatch('getSong', params.id)
+          this.changeSong(index)
         }
       }
     }

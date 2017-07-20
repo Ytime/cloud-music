@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
 // import Hello from '@/components/Hello'
 
 Vue.use(Router)
@@ -45,7 +46,16 @@ export default new Router({
     {
       path: '/player',
       name: 'player',
-      component: require('../components/player.vue')
+      component: require('../components/player.vue'),
+      beforeEnter: (to, from, next) =>{
+        store.commit('SHOW_PLAYER');
+        next();
+      },
+      // beforeLeave: (to, from, next) => {
+      //   console.log('leave')
+      //   store.commit('CLOSE_PLAYER');
+      //   next();
+      // }
     }
   ]
 })
