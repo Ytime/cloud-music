@@ -48,10 +48,10 @@
             <!--点击跳转到歌单播放界面-->
             <router-link to="/playlist/45">
               <div class="count">11万</div>
-              <img class="response" src="http://p3.music.126.net/DNlE0AUQdXci4XaQaxsHPQ==/18643319162278619.jpg?param=300y170" alt="歌单封面">
+              <img class="response" src="http://p3.music.126.net/4yKLwestioAjiv_4Rhdbng==/19018252625830120.jpg?param=159y90" alt="歌单封面">
               <div class="description">
-                <div class="mv-name">name</div>
-                <div class="author">author</div>
+                <div class="mv-name">Yo Contigo, Tú Conmigo (The Gong Gong Song / El Tema De La Película "Gru 3 Mi Villano Favorito")</div>
+                <div class="author">Morat/Alvaro Soler</div>
               </div>
             </router-link>
           </div>
@@ -92,7 +92,6 @@
         this.$http(getPlayListByWhere('全部', 'hot', 0, true, 6)).then(res => {
             this.isLoading = false;
             this.playList = res.data.playlists;
-            console.log(res.data)
         })
     },
     filters: {

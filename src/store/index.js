@@ -14,6 +14,8 @@ export default new Vuex.Store({
     isPlaying: false,
     //播放列表
     isShow: false,
+    //获取MP3地址
+    isLoadingSRC: false,
     //播放器页面
     isShowPlayer: false,
     //当前播放歌曲在列表中的位置（复用，如果为负，表示使用playHistory的数据）
@@ -62,6 +64,12 @@ export default new Vuex.Store({
       state.audio = obj;
     },
 
+    START_LOADING_SRC(state){
+      state.isLoading = true;
+    },
+    STOP_LOADING_SRC(state){
+      state.isLoading = false;
+    },
     //播放音乐,如果有索引参数，表示切歌
     PLAY(state) {
       // console.log()
@@ -164,10 +172,18 @@ export default new Vuex.Store({
       }
     },
     //通过歌曲id获取歌曲
-    getSong(context, {id}){
-      console.log("action: getSong")
+    getSong({context, commit, state}, {id}){
+      // 使用 CancelToken 退出一个Axios事件
+      let cancelToken = Axios.CancelToken,
+          source = cancelToken.source();
+      if (state.isLoadingSRC && state.playlist.length > 0) {
+        console.log('cancel');
+        source.cancel()
+      }
+      commit('START_LOADING_SRC');
       Axios.get(api.getSong(id)).then( ({data}) => {
         if (data.code === 200){
+          commit('STOP_LOADING_SRC');
           context.commit("SET_PLAYER_SRC", data.data[0].url);
         }
       }).catch( err => {

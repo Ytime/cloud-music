@@ -10,6 +10,7 @@
 <script>
 //  import player from './components/player.vue'
   import playerBar from './components/playerBar.vue'
+
   export default {
     name: 'app',
     components: {

@@ -198,21 +198,22 @@
   .play-cd{
     position: relative;
     overflow: hidden;
-    height: 20rem;
+    height: 18rem;
 
     &:before{
       content: '';
       position: absolute;
       width: 4rem;
       height: 6rem;
-      right: 30%;
-      top: -.8rem;
-      /*显示设置层叠顺序，避免被cd的旋转动画盖住*/
+      left: 50%;
+      margin-left: -0.6rem;
+      top: -0.6rem;
+      /*显式设置层叠顺序，避免被cd的旋转动画盖住*/
       z-index: 1;
       background: url("/static/stick_bg.png") no-repeat left top;
-      background-size: cover;
+      background-size: contain;
       transition: all 300ms ease-in;
-      transform-origin: left top;
+      transform-origin: 10% 10%;
       transform: rotate(0deg);
     }
     &.pause:before{
@@ -226,7 +227,7 @@
 
       background-color: rgba(107, 107, 107, 0.3);
       border-radius: 50%;
-      margin: 3rem auto;
+      margin: 3.2rem auto;
       .cd-wrapper{
         width: 100%;
         height: 100%;
@@ -344,11 +345,11 @@
       }
       .play{
         background: url("/static/play.png") center no-repeat ;
-        background-size: cover;
+        background-size: contain;
       }
       .pause{
         background: url("/static/pause.png") center no-repeat ;
-        background-size: cover;
+        background-size: contain;
       }
       .list{
         background: url("/static/player_list.png") center no-repeat;

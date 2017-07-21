@@ -20,7 +20,7 @@
         </div>
         <!--歌单名字和用户名-->
         <div class="list-info">
-          <p class="nam">{{name}}</p>
+          <p class="name">{{name}}</p>
           <p class="user">
             <mu-avatar slot="left"  :src="creator.avatarUrl" :size="30" :iconSize="20"/>
             <span class="user-name">{{creator.nickname}}</span>
@@ -116,12 +116,15 @@
           vm.creator = params.creator;
         }
 //        document.addEventListener('scroll', vm.scrollHandle, false);
-        window.onscroll = vm.scrollHandle
+//        window.onscroll = vm.scrollHandle
+
+        window.addEventListener('scroll', vm.scrollHandle, false);
       })
     },
     //离开路由的操作，离开路由时，播放列表可能是打开状态
 //    beforeRouteLeave(to, from, next){
-//
+//      window.removeEventListener('scroll', this.scrollHandle, false);
+//      next();
 //    },
     computed: {
       //获取当前播放歌曲的id
@@ -150,7 +153,7 @@
       //页面滚动事件处理
       scrollHandle(){
         let scrollOffset = window.pageYOffset;
-        if (scrollOffset >= parseInt(document.documentElement.style.fontSize) * 10){
+        if (scrollOffset >= parseInt(document.documentElement.style.fontSize) * 6){
           this.isActive = 1;
         }else{
           this.isActive = 0;
@@ -244,6 +247,7 @@
     background-repeat: no-repeat;
     background-position: bottom right;
     background-size: cover;
+    /*z-index: -1;*/
     filter: blur(30px);
   }
   .cover-mask{
@@ -275,7 +279,9 @@
       width: 7.5rem;
       margin-left: 1rem;
       color: #fff;
-
+      .name{
+        .ellipsis(2)
+      }
       .user-name{
         display: inline-block;
         width: 5.4rem;
@@ -291,7 +297,7 @@
     left: 0;
     width: 100%;
     z-index: 10;
-    transition: background 1s;
+    transition: background 0.5s;
     background: rgba(206, 61, 62, 0);
     box-shadow: none;
   }

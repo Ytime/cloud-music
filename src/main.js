@@ -9,6 +9,11 @@ import 'muse-ui/dist/muse-ui.css'
 import store from './store'
 //主题样式
 import "./assets/theme.less"
+import FastClick from 'fastclick' // 消除移动端300毫秒延迟
+
+document.addEventListener('DOMContentLoaded', function () {
+  FastClick.attach(document.body)
+}, false)
 
 Vue.config.productionTip = false
 

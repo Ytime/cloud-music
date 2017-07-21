@@ -48,8 +48,6 @@
     mounted(){
       this.audio = document.getElementById('player');
       this.SET_AUDIO(this.audio);
-
-//      console.log(this.audio)
     },
     computed: {
       ...mapState(['isPlaying','player', 'mode']),
@@ -85,7 +83,7 @@
       },
       //audio加载出错回调函数
       loadError(){
-        if (this.audio.currentSrc){
+        if (!this.audio.currentSrc){
           console.log('歌曲路径不存在');
         }
       },
@@ -166,7 +164,7 @@
         height: 2rem;
         padding: 2px;
         .icon{
-          font-size: 1.2rem;
+          font-size: 1.5rem;
         }
 
       }
